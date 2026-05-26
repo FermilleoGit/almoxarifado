@@ -65,4 +65,3 @@ Você vai precisar fazer deploy em um servidor. Opções gratuitas:
 - **Render** (render.com) — também simples
 - **PythonAnywhere** (pythonanywhere.com) — específico para Python
 
-Me peça ajuda para configurar qualquer uma dessas opções!

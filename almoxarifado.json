@@ -2,9 +2,9 @@
   {
     "id": 1779800162903,
     "nome": "Pincel",
-    "disponivel": false,
-    "data_retirada": "26/05/2026 10:02",
-    "quem_retirou": "Fernando"
+    "disponivel": true,
+    "data_retirada": null,
+    "quem_retirou": ""
   },
   {
     "id": 1779800175270,
@@ -23,15 +23,15 @@
   {
     "id": 1779800187958,
     "nome": "Cortador de grama",
-    "disponivel": true,
-    "data_retirada": null,
-    "quem_retirou": ""
+    "disponivel": false,
+    "data_retirada": "26/05/2026 11:32",
+    "quem_retirou": "Fer"
   },
   {
     "id": 1779800557914,
     "nome": "Motosserra",
-    "disponivel": false,
-    "data_retirada": "26/05/2026 10:03",
-    "quem_retirou": "Fernando"
+    "disponivel": true,
+    "data_retirada": null,
+    "quem_retirou": ""
   }
 ]

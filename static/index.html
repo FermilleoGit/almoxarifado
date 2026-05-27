@@ -438,6 +438,7 @@
     <h2>Retirar produto</h2>
     <p id="modal-retirada-nome"></p>
     <input type="text" id="input-quem" placeholder="Seu nome..." maxlength="60">
+    <input type="password" id="input-senha" placeholder="Senha de administrador..." maxlength="30" style="margin-top: 8px;">
     <div class="modal-actions">
       <button class="btn-cancel" onclick="fecharModal('modal-retirada')">Cancelar</button>
       <button class="btn-confirm" onclick="confirmarRetirada()">Confirmar retirada</button>
@@ -541,26 +542,48 @@
   }
 
   // ── Retirada ──────────────────────────────────────────────────────
-  function abrirRetirada(id) {
-    produtoRetirandoId = id;
-    const p = produtos.find(x => x.id === id);
-    document.getElementById('modal-retirada-nome').textContent = `Produto: ${p.nome}`;
-    document.getElementById('input-quem').value = '';
-    abrirModal('modal-retirada');
-    setTimeout(() => document.getElementById('input-quem').focus(), 350);
+function abrirRetirada(id) {
+  produtoRetirandoId = id;
+  const p = produtos.find(x => x.id === id);
+  document.getElementById('modal-retirada-nome').textContent = `Produto: ${p.nome}`;
+  document.getElementById('input-quem').value = '';
+  document.getElementById('input-senha').value = ''; // Limpa a senha
+  abrirModal('modal-retirada');
+  setTimeout(() => document.getElementById('input-quem').focus(), 350);
+}
+
+async function confirmarRetirada() {
+  const quem = document.getElementById('input-quem').value.trim();
+  const senha = document.getElementById('input-senha').value.trim();
+  
+  if (!quem) { 
+    toast('Informe seu nome', 'err'); 
+    return; 
+  }
+  
+  if (!senha) { 
+    toast('Digite a senha de administrador', 'err'); 
+    return; 
   }
 
-  async function confirmarRetirada() {
-    const quem = document.getElementById('input-quem').value.trim();
-    if (!quem) { toast('Informe seu nome', 'err'); return; }
-
-    const res = await api(`/produtos/${produtoRetirandoId}/retirar`, 'POST', { quem });
-    if (res.erro) { toast(res.erro, 'err'); return; }
-
-    fecharModal('modal-retirada');
-    await carregar();
-    toast(`Retirado por ${quem} ✅`, 'ok');
+  const res = await api(`/produtos/${produtoRetirandoId}/retirar`, 'POST', { 
+    quem: quem,
+    senha: senha 
+  });
+  
+  if (res.erro) { 
+    if (res.erro.includes('Senha') || res.status === 401) {
+      toast('Senha incorreta!', 'err');
+    } else {
+      toast(res.erro, 'err');
+    }
+    return; 
   }
+
+  fecharModal('modal-retirada');
+  await carregar();
+  toast(`Retirado por ${quem} ✅`, 'ok');
+}
 
   // ── Devolver ──────────────────────────────────────────────────────
   async function devolverProduto(id) {
@@ -624,6 +647,10 @@
   });
 
   document.getElementById('input-quem').addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmarRetirada();
+  });
+
+  document.getElementById('input-senha').addEventListener('keydown', e => {
     if (e.key === 'Enter') confirmarRetirada();
   });
 
